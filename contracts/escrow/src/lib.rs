@@ -110,6 +110,15 @@ pub struct EscrowContract;
 #[allow(missing_docs)]
 #[contractimpl]
 impl EscrowContract {
+    /// Read the currently initialized admin for deployment authorization checks.
+    /// Does not mutate state or grant authority.
+    pub fn get_admin(env: Env) -> Result<Address, Error> {
+        env.storage()
+            .instance()
+            .get(&DataKey::Admin)
+            .ok_or(Error::NotInitialized)
+    }
+
     /// Pause the contract, blocking state-changing operations.
     ///
     /// Only the admin may call this. Emits a `ContractPaused` event carrying the
